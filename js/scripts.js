@@ -32,11 +32,16 @@ function resetScores() {
 }
 
 Player.prototype.win = function() {
-  if (this.totalScore >= 10) {
+  if (this.totalScore >= 20) {
     console.log(this);
     console.log("Final winner is " + this.id);
+    displayAllScores();
+    $("#winnerPlayer").html("");
+    $("#winnerPlayer").append("<p> The winner is player id " + this.id + "!</p>");
+    $("#winnerPlayer").show();
     this.winTotal += 1;
     resetScores();
+    displayAllScores();
     return true;
   }
   else {
@@ -69,6 +74,22 @@ Dice.prototype.roll = function(playerId) {
   }
 }
 
+var displayScores = function(playerId) {
+  var divId = "#scorePlayer" + playerId;
+  var currentPlayer = players[playerId];
+  $(divId).html("");
+  $(divId).append("<p>Total Score: "+currentPlayer.totalScore+"</p>");
+  $(divId).append("<p>Current Score: "+currentPlayer.currentScore+"</p>");
+  $(divId).append("<p>Turn Score: "+currentPlayer.turnScore+"</p>");
+  $(divId).append("<p>Win Total: "+currentPlayer.winTotal+"</p>");
+}
+
+var displayAllScores = function() {
+  Object.keys(players).forEach(function(playerId) {
+    displayScores(playerId);
+  });
+}
+
 var dice = new Dice();
 var playerCounter = 0;
 var players = {};
@@ -88,7 +109,10 @@ $(document).ready(function() {
   // players = { 0: player1, 1: player2 }
   //playerCounter++;
   //player1 starts rolling dice
+  displayScores(player1.id);
+  displayScores(player2.id);
   $("#rollDiceButton").click(function(){
+    $("#winnerPlayer").hide();
     //players = { 0: player1 }
     var currentPlayer = players[currentPlayerId];
     //As currentPlayerId is 0,
@@ -97,10 +121,15 @@ $(document).ready(function() {
     //currentPlayer = players[1] = player2
     dice.roll(currentPlayerId);
     console.log(currentPlayer);
+    displayScores(currentPlayer.id);
+
   });
   $("#holdButton").click(function(){
+    $("#winnerPlayer").hide();
     var currentPlayer = players[currentPlayerId];
     currentPlayer.hold();
     console.log(currentPlayer);
+    displayScores(currentPlayer.id);
+
   });
 });

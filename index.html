@@ -9,7 +9,22 @@
     <title></title>
   </head>
   <body>
-    <button id="rollDiceButton">Roll dice</button>
-    <button id="holdButton">Hold</button>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <p class="text-center">Player 1</p>
+          <div id="scorePlayer0"></div>
+        </div>
+        <div class="col-md-6">
+          <p class="text-center">Player 2</p>
+          <div id="scorePlayer1"></div>
+        </div>
+      </div>
+      <div class="row d-flex flex-row justify-content-center">
+        <button id="rollDiceButton">Roll dice</button>
+        <button id="holdButton">Hold</button>
+        <div id="winnerPlayer"></div>
+      </div>
+    </div>
   </body>
 </html>
