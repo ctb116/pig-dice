@@ -9,33 +9,65 @@ function Player(id) {
   this.turnScore = 0; //the number on a dice
 };
 
-var players = {};
-
 function Dice() {
   this.diceValue = 0;
 }
 
+function switchPlayer() {
+  if (currentPlayerId === 0) {
+    currentPlayerId = 1;
+  }
+  else {
+    currentPlayerId = 0;
+  }
+}
+
+Player.prototype.hold = function() {
+  this.totalScore += this.currentScore;
+  this.currentScore = 0;
+  this.turnScore = 0;
+  switchPlayer();
+}
 
 Dice.prototype.roll = function(playerId) {
   this.diceValue = getRandomInt(6)+1;
   players[playerId].turnScore = this.diceValue;
+  if (this.diceValue === 1) {
+    players[playerId].currentScore = 0;
+    switchPlayer();
+  }
+  else {
+    players[playerId].currentScore += this.diceValue;
+  }
 }
 
+var dice = new Dice();
+var playerCounter = 0;
+var players = {};
+var currentPlayerId = 0;
 
 $(document).ready(function() {
-  var playerCounter = 0;
-  var player1 = new Player(playerCounter);
-  var dice = new Dice();
-
-  players[player1.id] = player1;
   //before push  => players = {}
   //after push => players = { player1's id: player1 }
   // { player1's id: player1, player2's id: player2 }
-  //
+
+
+  var player1 = new Player(playerCounter);
   playerCounter++;
+  players[player1.id] = player1;
   var player2 = new Player(playerCounter);
-
-  dice.roll(player)
   players[player2.id] = player2;
-
+  //playerCounter++;
+  //player1 starts rolling dice
+  $("#rollDiceButton").click(function(){
+    //players = { 0: player1 }
+    var currentPlayer = players[currentPlayerId];
+    dice.roll(currentPlayerId);
+    console.log(currentPlayer);
+  });
+  $("#holdButton").click(function(){
+    var currentPlayer = players[currentPlayerId];
+    currentPlayer.hold();
+    console.log(currentPlayer);
+  });
 });
