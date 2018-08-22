@@ -7,6 +7,7 @@ function Player(id) {
   this.totalScore = 0; //if user says hold, currentScore will be added to totalScore, if user gets one from the dice, total score won't be increased
   this.currentScore = 0; //sum of turn scores
   this.turnScore = 0; //the number on a dice
+  this.winTotal = 0;
 };
 
 function Dice() {
@@ -31,9 +32,10 @@ function resetScores() {
 }
 
 Player.prototype.win = function() {
-  if (this.totalScore >= 20) {
+  if (this.totalScore >= 10) {
     console.log(this);
     console.log("Final winner is " + this.id);
+    this.winTotal += 1;
     resetScores();
     return true;
   }
